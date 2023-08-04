@@ -12,7 +12,7 @@ T power(T b, ll p) {
     
     return res;
 }
-    
+
 class Mint {
 public:
     ll x;
@@ -36,9 +36,9 @@ public:
         return *this;
     }
     
-    friend Mint &operator + (Mint lhs, Mint rhs) {return lhs += rhs;}
-    friend Mint &operator - (Mint lhs, Mint rhs) {return lhs -= rhs;}
-    friend Mint &operator * (Mint lhs, Mint rhs) {return lhs *= rhs;}
-    Mint &operator /= (Mint rhs) {return *this * power(rhs, mod - 2);}
-    friend Mint &operator / (Mint lhs, Mint rhs) {return lhs /= rhs;}
+    friend Mint operator + (Mint lhs, const Mint &rhs) {return lhs += rhs;}
+    friend Mint operator - (Mint lhs, const Mint &rhs) {return lhs -= rhs;}
+    friend Mint operator * (Mint lhs, const Mint &rhs) {return lhs *= rhs;}
+    Mint &operator /= (Mint rhs) {return *this *= power(rhs, mod - 2);}
+    friend Mint operator / (Mint lhs, const Mint &rhs) {return lhs /= rhs;}
 };
