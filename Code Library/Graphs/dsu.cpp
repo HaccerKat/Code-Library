@@ -13,8 +13,8 @@ public:
     }
     
     int findset(int u) {
-        while (parent[u] != u) u = parent[u];
-        return u;
+        if (u == parent[u]) return u;
+        return parent[u] = findset(parent[u]);
     }
  
     void unionset(int u, int v) {
