@@ -1,10 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n;
 class DSU {
 vector<int> parent, sz;
 public:
-    DSU() {
+    DSU(int n) {
         parent.resize(n);
         sz.resize(n);
         for (int i = 0; i < n; i++) {
