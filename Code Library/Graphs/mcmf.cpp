@@ -28,7 +28,7 @@ public:
     
     void addedge(int u, int v, T cost, T cap) {
         edges.push_back(Edge(u, v, cost, cap));
-        edges.push_back(Edge(v, u, -cost, 0));
+        edges.push_back(Edge(v, u, -cost, T(0)));
         adj[u].push_back(m++);
         adj[v].push_back(m++);
     }

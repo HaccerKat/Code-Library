@@ -242,7 +242,7 @@ void solve() {
         if (t == 7) {
             cout << getlca(u, v) << "\n";
         }
-    }
+    }    
 }
 
 int32_t main() {

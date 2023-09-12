@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+typedef long long ll;
 const int inf = 1e9;
 template <class T>
 struct Edge {
@@ -13,7 +14,7 @@ struct Edge {
 template <class T>
 class Dinics {
 public:
-    T flowinf = 1e9;
+    T lim = 1 << 30;
     vector<Edge<T>> edges;
     vector<vector<int>> adj;
     vector<int> level, ptr;
@@ -39,8 +40,7 @@ public:
             q.pop();
             for (int id : adj[u]) {
                 int v = edges[id].v;
-                if (edges[id].cap - edges[id].flow == 0) continue;
-                if (level[v] > level[u] + 1) {
+                if (level[v] > level[u] + 1 && edges[id].cap - edges[id].flow >= lim) {
                     level[v] = level[u] + 1;
                     q.push(v);
                 }
@@ -67,13 +67,17 @@ public:
     
     T flow() {
         T res = 0;
-        while (true) {
+        for (lim = (1LL << 31); lim > 0;) {
             level = vector<int>(n, inf);
             level[s] = 0;
             ptr = vector<int>(n, 0);
-            if (!bfs()) break;
+            if (!bfs()) {
+                lim >>= 1;
+                continue;
+            }
+            
             while (true) {
-                T pushed = dfs(s, flowinf);
+                T pushed = dfs(s, lim);
                 if (pushed == 0) break;
                 res += pushed;
             }
@@ -82,3 +86,24 @@ public:
         return res;
     }
 };
+
+void solve() {
+    int n, m, s, t;
+    cin >> n >> m >> s >> t;
+    s--, t--;
+    Dinics<ll> flows(n, s, t);
+    for (int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        u--, v--;
+        flows.addedge(u, v, w);
+    }
+    
+    cout << flows.flow() << "\n";
+}
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    solve();
+}
