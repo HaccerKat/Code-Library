@@ -6,8 +6,7 @@ const int LOG = 20;
 template <class T>
 class RMQ {
 public:
-    int n;
-    bool ty;
+    int n, int ty;
     vector<vector<T>> rmq;
     vector<int> logA;
     T operation(T x, T y) {
@@ -32,7 +31,7 @@ public:
         }
     }
     
-    RMQ(vector<T> a, bool ty) {
+    RMQ(vector<T> a, int ty) {
         this->ty = ty;
         n = a.size();
         rmq.resize(n);
