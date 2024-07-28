@@ -4,6 +4,7 @@
 #else
 #define dbg(...)
 #define dbgm(...)
+#define ulim_stack()
 #endif
 using namespace std;
 typedef long long ll;
@@ -25,6 +26,7 @@ void solve() {
 }
 
 int32_t main() {
+    ulim_stack();
     std::ios::sync_with_stdio(false);
     cin.tie(NULL);
     int tt;

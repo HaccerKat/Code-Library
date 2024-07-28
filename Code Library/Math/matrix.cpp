@@ -167,35 +167,46 @@ using Mint = Modular<VarMod>;
  
 constexpr int md = (int) 1e9 + 7;
 using Mint = Modular<std::integral_constant<decay<decltype(md)>::type, md>>;
- 
-/*vector<Mint> fact(1, 1);
-vector<Mint> inv_fact(1, 1);
- 
-Mint C(int n, int k) {
-  if (k < 0 || k > n) {
-    return 0;
-  }
-  while ((int) fact.size() < n + 1) {
-    fact.push_back(fact.back() * (int) fact.size());
-    inv_fact.push_back(1 / fact.back());
-  }
-  return fact[n] * inv_fact[k] * inv_fact[n - k];
-}*/
+constexpr uint64_t mdmd = 8LL * md * md;
 
 template <typename T>
 void matmul(vector<vector<T>> &a, vector<vector<T>> b) {
     int n = a.size(), m = a[0].size(), p = b[0].size();
     assert(m == b.size());
-    vector<vector<T>> c(n, vector<T>(p));
+    uint64_t A[n][m], B[m][p], C[n][p];
+    memset(C, 0, sizeof(C));
     for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            A[i][j] = (uint64_t)a[i][j];
+        }
+    }
+
+    for (int i = 0; i < m; i++) {
         for (int j = 0; j < p; j++) {
-            for (int k = 0; k < m; k++) {
-                c[i][j] += a[i][k] * b[k][j];
+            B[i][j] = (uint64_t)b[i][j];
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int k = 0; k < m; k++) {
+            for (int j = 0; j < p; j++) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
+
+            if (k % 8 == 0) {
+                for (int j = 0; j < p; j++) {
+                    C[i][j] = min(C[i][j], C[i][j] - mdmd);
+                }
             }
         }
     }
     
-    a = c;
+    a = vector<vector<T>>(n, vector<T>(p));
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < p; j++) {
+            a[i][j] = C[i][j];
+        }
+    }
 }
 
 template <typename T>

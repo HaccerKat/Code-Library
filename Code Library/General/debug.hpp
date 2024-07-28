@@ -1,3 +1,4 @@
+#include <sys/resource.h>
 #include <string>
 #include <bitset>
 #include <chrono>
@@ -99,12 +100,21 @@ void dbgs(Heads H, Tails... T){
     dbgs(T...);
 }
 
+void create_ulim_stack() {
+    rlimit R;
+    getrlimit(RLIMIT_STACK, &R);
+    R.rlim_cur = R.rlim_max;
+    setrlimit(RLIMIT_STACK, &R);
+}
+
 #ifdef DEBUG
 #define dbgv(...) cout << to_string(__VA_ARGS__) << endl;
 #define dbg(...) cout << "[" << #__VA_ARGS__ << "]: "; dbgv(__VA_ARGS__);
 #define dbgr(...) dbgr(__VA_ARGS__); cout << endl;
 #define dbgm(...) cout << "[" << #__VA_ARGS__ << "]: "; dbgr(__VA_ARGS__);
+#define ulim_stack() create_ulim_stack();
 #else
 #define dbg(...)
 #define dbgm(...)
+#define ulim_stack()
 #endif

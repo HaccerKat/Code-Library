@@ -182,18 +182,6 @@ Mint C(int n, int k) {
   return fact[n] * inv_fact[k] * inv_fact[n - k];
 }*/
 
-typedef long long ll;
-typedef unsigned int ui;
-typedef unsigned long long ull;
-typedef pair<int, int> pi;
-typedef pair<ll, ll> pll;
-// using u128 = __uint128_t;
-// using i128 = __int128;
-const int mod = 1000000007;
-const int N = 200005;
-const int LOG = 20;
-const int inf = 1e9;
-const double eps = 1e-11;
 const Mint root = 3, invroot = (Mint)1 / 3, invtwo = (Mint)1 / 2;
 int nxtpow(int n) {
     int x = 1;
@@ -378,7 +366,7 @@ struct Poly {
         int n = a.size();
         auto [s, ok] = cipolla(a[0]);
         if (!ok) return {Poly(), false};
-        if ((ll)s > (ll)(-s)) s = -s;
+        if ((long long)s > (long long)(-s)) s = -s;
         Poly b = Poly(s), c = *this;
         for (int i = 2; i <= nxtpow(k); i <<= 1) {
             b = (b * b + c.modx(i)) * b.inv(i) * Poly(invtwo);
@@ -438,7 +426,7 @@ struct Poly {
         return Poly(b);
     }
     
-    Poly pow(int k, ll p) {
+    Poly pow(int k, long long p) {
         if (p == 0) return Poly(1);
         normalize();
         int n = a.size();

@@ -1,51 +1,31 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-const int N = 200005;
-const int LOG = 20;
-template <class T>
-class RMQ {
-public:
-    int n, int ty;
-    vector<vector<T>> rmq;
-    vector<int> logA;
-    T operation(T x, T y) {
-        if (ty == 0) return min(x, y);
-        else if (ty == 1) return max(x, y);
-        else return gcd(x, y);
-    }
-    
-    void precomp(vector<T> &a) {
-        for (int i = 2; i <= n; i++) {
-            logA[i] = logA[i >> 1] + 1;
-        }
-        
-        for (int i = 0; i < n; i++) {
-            rmq[i][0] = a[i];
-        }
-        
-        for (int j = 1; j < LOG; j++) {
-            for (int i = 0; i + (1 << j) <= n; i++) {
-                rmq[i][j] = operation(rmq[i][j - 1], rmq[i + (1 << j - 1)][j - 1]);
+template<class U> struct RMQ : public U {
+    using T = typename U::T;
+    int n, LOG;
+    vector<T> a;
+    vector<vector<T>> t;
+    RMQ(vector<T> b) : n(b.size()), a(b) {
+        LOG = __lg(n) + 1;
+        t = vector<vector<T>>(LOG, vector<T>(n));
+        t[0] = a;
+        for (int i = 1; i < LOG; i++) {
+            for (int j = 0; j + (1 << i) <= n; j++) {
+                t[i][j] = U::merge(t[i - 1][j], t[i - 1][j + (1 << i - 1)]);
             }
         }
     }
-    
-    RMQ(vector<T> a, int ty) {
-        this->ty = ty;
-        n = a.size();
-        rmq.resize(n);
-        logA.resize(n + 1);
-        for (int i = 0; i < n; i++) {
-            rmq[i].resize(LOG);
-        }
-        
-        precomp(a);
-    }
-    
+
     T query(int l, int r) {
         int sz = r - l + 1;
-        int lg = logA[sz];
-        return operation(rmq[l][lg], rmq[r - (1 << lg) + 1][lg]);
+        int lg = __lg(sz);
+        return U::merge(t[lg][l], t[lg][r - (1 << lg) + 1]);
+    }
+};
+
+struct Min {
+    using T = int;
+    T merge(T a, T b) {
+        return min(a, b);
     }
 };
